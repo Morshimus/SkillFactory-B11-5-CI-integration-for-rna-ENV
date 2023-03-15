@@ -1,0 +1,8 @@
+---
+- hosts: shell_runners
+  become: true
+  gather_facts: true
+  vars_files:
+    - vars/main_shell.yaml
+  roles:
+    - role: gitlab-runner

@@ -1,0 +1,4 @@
+---
+- src: https://github.com/riemers/ansible-gitlab-runner
+  name: gitlab-runner
+  scm: git 

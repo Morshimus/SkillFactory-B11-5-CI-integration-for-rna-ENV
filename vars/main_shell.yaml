@@ -1,0 +1,7 @@
+gitlab_runner_runners:
+  - name: 'Docker GitLab Runner'
+    # token is an optional override to the global gitlab_runner_registration_token
+    #token: 'abcd'
+    # url is an optional override to the global gitlab_runner_coordinator_url
+    url: 'https://gitlab.com/'
+    executor: shell
