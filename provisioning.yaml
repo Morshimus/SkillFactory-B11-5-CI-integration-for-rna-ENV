@@ -7,3 +7,9 @@
     - ./secrets.yaml
   roles:
     - role: gitlab-runner
+  tasks:
+    - name: Install mysql client
+      apt:
+        update_cache: yes
+        pkg:
+          - mysql-client
