@@ -12,7 +12,7 @@ function firewall {
         -ArgumentList "-command", "`$adapters=(Get-NetAdapter | Where-Object Name -like 'vEthernet*');
         Set-NetFirewallProfile -DisabledInterfaceAliases `$adapters.Name"}
     if($up){ Start-process powershell -verb runas `
-        -ArgumentList "--command","Set-NetFirewallProfile -name domain,public,private -DisabledInterfaceAliases NotConfigured"
+        -ArgumentList "-command","Set-NetFirewallProfile -name domain,public,private -DisabledInterfaceAliases NotConfigured"
     }
 
 }
