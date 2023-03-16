@@ -4,5 +4,6 @@
   gather_facts: true
   vars_files:
     - vars/main_shell.yaml
+    - ./secrets.yaml
   roles:
     - role: gitlab-runner

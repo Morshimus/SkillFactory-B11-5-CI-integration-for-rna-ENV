@@ -1,37 +1,44 @@
 Set-alias vg vagrant
 
+function firewall {
+    param (
+        [Parameter(Mandatory=$false, Position=1)]
+        [switch]$up,
+        [Parameter(Mandatory=$false, Position=1)]
+        [switch]$down
+    )
+
+    if($down){Start-process powershell -Verb runas  `
+        -ArgumentList "-command", "`$adapters=(Get-NetAdapter | Where-Object Name -like 'vEthernet*');
+        Set-NetFirewallProfile -DisabledInterfaceAliases `$adapters.Name"}
+    if($up){ Start-process powershell -verb runas `
+        -ArgumentList "--command","Set-NetFirewallProfile -name domain,public,private -DisabledInterfaceAliases NotConfigured"
+    }
+
+}
+
 function vagrant {
     param (
+        [Parameter(Mandatory=$False)]
+        [string]$distr = "Ubuntu-20.04",
+        [Parameter(Mandatory=$False)]
+        [String]$user = "morsh92",
         [Parameter(Mandatory=$false, Position=0)]
         [string]$action = "up",
         [Parameter(Mandatory=$false, Position=1)]
-        [switch]$provision 
+        [switch]$provision,
+        [Parameter(Mandatory=$false, Position=1)]
+        [switch]$force
     )
+
+    if(($force) -and ($action -like "destroy")){$force_cmd = '-f'}
+   
+    if(($provision) -and ($action -like "up")){$provision_cmd = "--provision"}
+     
+    wsl  -d $distr -u $user -e /bin/bash -c "export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1 && vagrant $action $provision_cmd $force_cmd"
 
     
 }
-
-function destroy {
-    param (
-        [Parameter(Mandatory=$false, Position=0)]
-        [switch]$withoutForce
-    )
-    
-    if($withoutForce){
-     vagrant destroy 
-    }else{
-     vagrant destroy -f   
-    }
-}
-
-function ssh {
-  vagrant ssh
-}
-
-function rebuild {    
-    destroy ; if($?) {Wait-Event -Timeout 5; apply}
-}
-
 
 function ansible {
     param (
@@ -91,11 +98,11 @@ function ansibleVault {
         [Parameter(Mandatory=$False,Position=0)]
         [String]$action = 'encrypt',
         [Parameter(Mandatory=$False,Position=0)]
-        [String]$file = 'secrets.yml',
+        [String]$file = 'secrets.yaml',
         [Parameter(Mandatory=$False,Position=0)]
         [switch]$ask,
         [Parameter(Mandatory=$False,Position=0)]
-        [string]$fileSecrets = '~/.vault_pass_B12'
+        [string]$fileSecrets = '~/.vault_pass_B11-5'
 
     )
     

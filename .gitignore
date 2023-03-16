@@ -11,6 +11,7 @@ morsh_*_SSH
 morsh_*_SSH.pub
 adm-user_SSH
 adm-user_SSH.pub
+vagrant_key
 *_cloud.ini
 **/molecule/*
 **/roles/*
